@@ -29,7 +29,13 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "plugins": [
+      "simple-import-sort"
+    ],
+    "rules": {
+      "simple-import-sort/imports": "error"
+    }
   },
   "browserslist": {
     "production": [
@@ -44,6 +50,7 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1"
   }
 }
