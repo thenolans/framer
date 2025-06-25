@@ -10,11 +10,18 @@ type Props = {
   height: number;
   matting: number;
   frame: number;
+  overlap: number;
 };
 
 const PLACEHOLDER_SRC = require("../../assets/mountains.jpg");
 
-export default function FramePreview({ width, height, matting, frame }: Props) {
+export default function FramePreview({
+  width,
+  height,
+  matting,
+  frame,
+  overlap,
+}: Props) {
   const [image, setImage] = useState<string | null>(null);
   const aspectRatio = `${width} / ${height}`;
   const sizeClasses =
@@ -25,7 +32,8 @@ export default function FramePreview({ width, height, matting, frame }: Props) {
     width,
     height,
     matting,
-    frame
+    frame,
+    overlap
   );
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -48,15 +56,15 @@ export default function FramePreview({ width, height, matting, frame }: Props) {
       htmlFor="file-upload"
     >
       <div className="absolute -left-8 top-0 bottom-0 w-6 border-t border-b border-gray-400">
-        <div className="h-[45%] border-l absolute left-1/2 border-gray-400" />
-        <div className="h-[45%] border-l bottom-0 absolute left-1/2 border-gray-400" />
+        <div className="h-[44%] border-l absolute left-1/2 border-gray-400" />
+        <div className="h-[44%] border-l bottom-0 absolute left-1/2 border-gray-400" />
         <div className="absolute top-1/2 left-0 -translate-y-1/2">
           {frameHeight}"
         </div>
       </div>
       <div className="absolute -top-8 left-0 right-0 h-6 border-l border-r border-gray-400">
-        <div className="w-[45%] border-t absolute top-1/2 border-gray-400" />
-        <div className="w-[45%] border-t right-0 absolute top-1/2 border-gray-400" />
+        <div className="w-[44%] border-t absolute top-1/2 border-gray-400" />
+        <div className="w-[44%] border-t right-0 absolute top-1/2 border-gray-400" />
         <div className="absolute left-1/2 top-1/2 -translate-1/2">
           {frameWidth}"
         </div>

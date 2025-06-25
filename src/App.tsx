@@ -3,13 +3,14 @@ import { useState } from "react";
 import FramerLogo from "./assets/logo.png";
 import FramePreview from "./components/FramePreview";
 import Input from "./components/Input";
-import { FRAME_WIDTH, HEIGHT, MATTING, WIDTH } from "./constants";
+import { FRAME_THICKNESS, HEIGHT, MATTING, OVERLAP, WIDTH } from "./constants";
 
 function App() {
   const [width, setWidth] = useState(WIDTH);
   const [height, setHeight] = useState(HEIGHT);
   const [matting, setMatting] = useState(MATTING);
-  const [frame, setFrame] = useState(FRAME_WIDTH);
+  const [frame, setFrame] = useState(FRAME_THICKNESS);
+  const [overlap, setOverlap] = useState(OVERLAP);
 
   return (
     <div className="px-4 py-8 container mx-auto max-w-3xl space-y-8 min-h-screen h-screen max-h-screen overflow-hidden flex flex-col">
@@ -55,6 +56,16 @@ function App() {
             />
           </div>
         </div>
+        <div className="inline-flex flex-col items-center space-y-2">
+          <div>Overlap</div>
+          <div className="flex space-x-2 items-center">
+            <Input
+              value={overlap}
+              onChange={(e) => setOverlap(Number(e.target.value))}
+              placeholder="overlap"
+            />
+          </div>
+        </div>
       </div>
       <div className="grow-1 overflow-hidden text-center p-8">
         <FramePreview
@@ -62,7 +73,17 @@ function App() {
           height={height}
           matting={matting}
           frame={frame}
+          overlap={overlap}
         />
+      </div>
+      {/* <div className="text-center text-xs text-gray-500 max-w-2xl mx-auto">
+          The frame dimensions are calculated by taking the art dimensions,
+          frame thickness, and matting size added together and assuming the
+          matting or art recedes &frac12;" under the frame on all sides.
+        </div> */}
+      <div className="text-center text-xs text-gray-500 max-w-2xl mx-auto">
+        Click the art to change the image to get a better sense of how it will
+        look
       </div>
     </div>
   );
