@@ -10,10 +10,11 @@ export default function Input({
     }
     onChange?.(e);
   }
+
   return (
     <div className="relative">
       <input
-        className="h-12 rounded-lg border-gray-300 border-3 w-24 text-center outline-none focus:border-orange-900"
+        className="h-12 rounded-lg border-gray-300 border-3 w-24 text-center outline-none focus:border-orange-900 bg-white"
         type="text"
         onChange={handleChange}
         {...props}
