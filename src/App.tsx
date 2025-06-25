@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import FramerLogo from "./assets/logo.png";
 import FramePreview from "./components/FramePreview";
 import Input from "./components/Input";
 import { FRAME_WIDTH, HEIGHT, MATTING, WIDTH } from "./constants";
@@ -11,8 +12,8 @@ function App() {
   const [frame, setFrame] = useState(FRAME_WIDTH);
 
   return (
-    <div className="p-4 container mx-auto max-w-3xl space-y-8 min-h-screen h-screen max-h-screen overflow-hidden flex flex-col">
-      <h1 className="mx-auto text-2xl font-bold text-orange-900">Framer</h1>
+    <div className="px-4 py-8 container mx-auto max-w-3xl space-y-8 min-h-screen h-screen max-h-screen overflow-hidden flex flex-col">
+      <img src={FramerLogo} alt="Framer" className="w-16 mx-auto" />
       <div className="sm:flex sm:justify-around grid grid-cols-2 gap-8">
         <div className="inline-flex flex-col items-center space-y-2 col-span-2">
           <div>Art Dimensions</div>
