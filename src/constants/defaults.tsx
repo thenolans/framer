@@ -12,3 +12,5 @@ export const WoodBackgroundMap = {
   [Wood.PINE]: require("../assets/pine.png"),
   [Wood.WALNUT]: require("../assets/walnut.png"),
 };
+
+export const GITHUB_REPOSITORY_LINK = "https://github.com/thenolans/framer";

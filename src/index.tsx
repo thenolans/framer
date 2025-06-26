@@ -1,5 +1,6 @@
 import "./index.css";
 
+import GitHubLink from "components/GitHubLink";
 import FrameContextProvider from "contexts/frameContext";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -14,6 +15,7 @@ root.render(
   <React.StrictMode>
     <FrameContextProvider>
       <App />
+      <GitHubLink />
     </FrameContextProvider>
   </React.StrictMode>
 );
