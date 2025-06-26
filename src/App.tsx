@@ -1,21 +1,21 @@
 import FramerLogo from "assets/logo.png";
 import FramePreview from "components/FramePreview";
 import Input from "components/Input";
-import {
-  DEFAULT_FRAME_THICKNESS,
-  DEFAULT_HEIGHT,
-  DEFAULT_MATTING,
-  DEFAULT_OVERLAP,
-  DEFAULT_WIDTH,
-} from "constants/defaults";
-import { useState } from "react";
+import useFrameContext from "hooks/useFrameContext";
 
 function App() {
-  const [width, setWidth] = useState(DEFAULT_WIDTH);
-  const [height, setHeight] = useState(DEFAULT_HEIGHT);
-  const [matting, setMatting] = useState(DEFAULT_MATTING);
-  const [frame, setFrame] = useState(DEFAULT_FRAME_THICKNESS);
-  const [overlap, setOverlap] = useState(DEFAULT_OVERLAP);
+  const {
+    width,
+    setWidth,
+    height,
+    setHeight,
+    matting,
+    setMatting,
+    thickness,
+    setThickness,
+    overlap,
+    setOverlap,
+  } = useFrameContext();
 
   return (
     <div className="px-4 py-8 container mx-auto max-w-3xl space-y-8 min-h-screen h-screen max-h-screen overflow-hidden flex flex-col">
@@ -52,11 +52,11 @@ function App() {
           </div>
         </div>
         <div className="inline-flex flex-col items-center space-y-2">
-          <div>Frame Width</div>
+          <div>Frame Thickness</div>
           <div className="flex space-x-2 items-center">
             <Input
-              value={frame}
-              onChange={(e) => setFrame(Number(e.target.value))}
+              value={thickness}
+              onChange={(e) => setThickness(Number(e.target.value))}
               placeholder="Size"
             />
           </div>
@@ -73,17 +73,7 @@ function App() {
         </div>
       </div>
       <div className="grow-1 overflow-hidden text-center p-8">
-        <FramePreview
-          width={width}
-          height={height}
-          matting={matting}
-          frame={frame}
-          overlap={overlap}
-        />
-      </div>
-      <div className="text-center text-xs text-gray-500 max-w-2xl mx-auto">
-        Click the art to change the image to get a better sense of how it will
-        look
+        <FramePreview />
       </div>
     </div>
   );

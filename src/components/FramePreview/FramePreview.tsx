@@ -1,36 +1,24 @@
 import MountainPlaceholder from "assets/mountains.jpg";
 import PineTexture from "assets/pine.png";
 import classNames from "classnames";
+import useFrameContext from "hooks/useFrameContext";
 import { useState } from "react";
 import calculateOverallDimensions from "utils/calculateOverallDimensions";
 import calculatePaddingFromDimensions from "utils/calculatePaddingForDimensions";
 
-type Props = {
-  width: number;
-  height: number;
-  matting: number;
-  frame: number;
-  overlap: number;
-};
-
-export default function FramePreview({
-  width,
-  height,
-  matting,
-  frame,
-  overlap,
-}: Props) {
+export default function FramePreview() {
+  const { width, height, matting, thickness, overlap } = useFrameContext();
   const [image, setImage] = useState<string | null>(null);
   const aspectRatio = `${width} / ${height}`;
   const sizeClasses =
     width >= height ? "w-full max-h-full" : "h-full max-w-full";
-  const framePercent = calculatePaddingFromDimensions(frame, width, height);
+  const framePercent = calculatePaddingFromDimensions(thickness, width, height);
   const mattingPercent = calculatePaddingFromDimensions(matting, width, height);
   const { frameWidth, frameHeight } = calculateOverallDimensions(
     width,
     height,
     matting,
-    frame,
+    thickness,
     overlap
   );
 
