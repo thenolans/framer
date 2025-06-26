@@ -1,9 +1,9 @@
+import MountainPlaceholder from "assets/mountains.jpg";
+import PineTexture from "assets/pine.png";
 import classNames from "classnames";
 import { useState } from "react";
-
-import calculateOverallDimensions from "../../utils/calculateOverallDimensions";
-import calculatePaddingFromDimensions from "../../utils/calculatePaddingForDimensions";
-const PineTexture = require("../../assets/pine.jpg");
+import calculateOverallDimensions from "utils/calculateOverallDimensions";
+import calculatePaddingFromDimensions from "utils/calculatePaddingForDimensions";
 
 type Props = {
   width: number;
@@ -12,8 +12,6 @@ type Props = {
   frame: number;
   overlap: number;
 };
-
-const PLACEHOLDER_SRC = require("../../assets/mountains.jpg");
 
 export default function FramePreview({
   width,
@@ -82,7 +80,7 @@ export default function FramePreview({
           />
           <img
             className="absolute object-cover w-full h-full top-0 left-0 z-1 object-center cursor-pointer"
-            src={image || PLACEHOLDER_SRC}
+            src={image || MountainPlaceholder}
             alt=""
           />
         </div>
