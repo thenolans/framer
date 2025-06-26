@@ -2,11 +2,15 @@
   <img alt="Framer" src="https://github.com/user-attachments/assets/6b3bb26d-a160-47d6-bf76-8d5e8064bb05" width="124">
 </p>
 
-<p align="center">
+<div align="center">
   Quickly determine dimensions for crafting custom picture frames and visualize the end result by customizing the finishing options
-</p>
+</div>
+
+<br/>
 
 ---
+
+<br/>
 
 Mobile             |  Desktop
 :-------------------------:|:-------------------------:
