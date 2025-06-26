@@ -12,14 +12,14 @@ export default function Input({
   }
 
   return (
-    <div className="relative">
+    <div className="relative -translate-y-4">
       <input
-        className="h-12 rounded-lg border-gray-300 border-3 w-24 text-center outline-none focus:border-orange-900 bg-white"
+        className="w-16 border-b border-gray-400 text-center outline-none focus:ring ring-amber-800 py-1"
         type="text"
         onChange={handleChange}
         {...props}
       />
-      <div className="absolute top-2 right-6 text-gray-300">"</div>
+      <div className="absolute top-0 right-1 text-gray-400">"</div>
     </div>
   );
 }

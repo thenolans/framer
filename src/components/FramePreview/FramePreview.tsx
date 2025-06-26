@@ -35,10 +35,7 @@ export default function FramePreview() {
         backgroundImage: `url(${PineTexture})`,
         padding: `${framePercent}%`,
       }}
-      className={classNames(
-        "inline-block bg-cover relative translate-x-4",
-        sizeClasses
-      )}
+      className={classNames("bg-cover relative translate-x-4", sizeClasses)}
       htmlFor="file-upload"
     >
       <div className="absolute -left-8 top-0 bottom-0 w-6 border-t border-b border-gray-400">
