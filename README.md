@@ -8,6 +8,6 @@
 
 ---
 
-
-<img width="1117" alt="Screenshot 2025-06-26 at 8 45 00 AM" src="https://github.com/user-attachments/assets/4dd5ccc8-e637-4d77-bd78-05e4c44e5674" />
-
+Mobile             |  Desktop
+:-------------------------:|:-------------------------:
+![Mobile](https://github.com/user-attachments/assets/1cf46fcd-e0de-4be9-a26f-b79949d84877)  |  ![Desktop](https://github.com/user-attachments/assets/92ad298d-0c03-4ecf-bcd8-65c27e248484)
