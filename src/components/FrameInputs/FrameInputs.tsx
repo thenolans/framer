@@ -35,11 +35,11 @@ export default function FrameInputs() {
   } = useFrameContext();
 
   return (
-    <div className="space-y-16 px-4">
-      <img src={FramerLogo} alt="Framer" className="w-16 lg:w-24 mx-auto" />
+    <div className="space-y-16 px-4 w-full flex flex-col items-center">
+      <img src={FramerLogo} alt="Framer" className="w-16 lg:w-24" />
       <div className="space-y-4 max-w-sm w-full px-2">
         <InputContainer>
-          <Label>Art Dimensions</Label>
+          <Label>Art</Label>
           <EllipsisFill />
           <div className="flex items-center space-x-2">
             <Input
