@@ -11,4 +11,12 @@ export type FrameContext = {
   setMatting: Dispatch<SetStateAction<number>>;
   overlap: number;
   setOverlap: Dispatch<SetStateAction<number>>;
+  wood: Wood;
+  setWood: Dispatch<SetStateAction<Wood>>;
 };
+
+export enum Wood {
+  OAK = "oak",
+  WALNUT = "walnut",
+  PINE = "pine",
+}

@@ -1,5 +1,6 @@
 import FramerLogo from "assets/logo.png";
 import Input from "components/Input";
+import WoodSelect from "components/WoodSelect/WoodSelect";
 import useFrameContext from "hooks/useFrameContext";
 import { ComponentPropsWithoutRef } from "react";
 
@@ -81,6 +82,7 @@ export default function FrameInputs() {
             placeholder="overlap"
           />
         </InputContainer>
+        <WoodSelect />
       </div>
     </div>
   );

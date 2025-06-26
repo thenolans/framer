@@ -1,13 +1,14 @@
 import MountainPlaceholder from "assets/mountains.jpg";
-import PineTexture from "assets/pine.png";
 import classNames from "classnames";
+import { WoodBackgroundMap } from "constants/defaults";
 import useFrameContext from "hooks/useFrameContext";
 import { useState } from "react";
 import calculateOverallDimensions from "utils/calculateOverallDimensions";
 import calculatePaddingFromDimensions from "utils/calculatePaddingForDimensions";
 
 export default function FramePreview() {
-  const { width, height, matting, thickness, overlap } = useFrameContext();
+  const { width, height, matting, thickness, overlap, wood } =
+    useFrameContext();
   const [image, setImage] = useState<string | null>(null);
   const aspectRatio = `${width} / ${height}`;
   const sizeClasses =
@@ -32,7 +33,7 @@ export default function FramePreview() {
     <label
       style={{
         aspectRatio,
-        backgroundImage: `url(${PineTexture})`,
+        backgroundImage: `url(${WoodBackgroundMap[wood]})`,
         padding: `${framePercent}%`,
       }}
       className={classNames("bg-cover relative translate-x-4", sizeClasses)}

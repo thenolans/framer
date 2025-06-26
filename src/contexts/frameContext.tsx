@@ -4,6 +4,7 @@ import {
   DEFAULT_MATTING,
   DEFAULT_OVERLAP,
   DEFAULT_WIDTH,
+  DEFAULT_WOOD,
 } from "constants/defaults";
 import { createContext, ReactNode, useState } from "react";
 import { FrameContext as FrameContextType } from "types";
@@ -23,6 +24,8 @@ export const FrameContext = createContext<FrameContextType>({
   setThickness() {},
   overlap: DEFAULT_OVERLAP,
   setOverlap() {},
+  wood: DEFAULT_WOOD,
+  setWood() {},
 });
 
 export default function FrameContextProvider({ children }: Props) {
@@ -31,6 +34,7 @@ export default function FrameContextProvider({ children }: Props) {
   const [matting, setMatting] = useState(DEFAULT_MATTING);
   const [thickness, setThickness] = useState(DEFAULT_FRAME_THICKNESS);
   const [overlap, setOverlap] = useState(DEFAULT_OVERLAP);
+  const [wood, setWood] = useState(DEFAULT_WOOD);
 
   return (
     <FrameContext.Provider
@@ -45,6 +49,8 @@ export default function FrameContextProvider({ children }: Props) {
         setThickness,
         overlap,
         setOverlap,
+        wood,
+        setWood,
       }}
     >
       {children}
