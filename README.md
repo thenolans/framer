@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Framer" src="https://github.com/user-attachments/assets/6b3bb26d-a160-47d6-bf76-8d5e8064bb05" width="124">
+  <img alt="Framer" src="https://framer.thenolans.io/static/media/logo.059834739506130d1142.png" width="124">
 </p>
 
 <div align="center">
