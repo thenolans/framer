@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Framer" src="https://framer.thenolans.io/static/media/logo.059834739506130d1142.png" width="124">
+  <img alt="Framer" src="https://thenolans-apps-prod.s3.amazonaws.com/thenolansio/app_framer" width="124">
 </p>
 
 <div align="center">
