@@ -1,4 +1,4 @@
-import { type CSSProperties, type DragEvent, useEffect, useState } from 'react'
+import { type DragEvent, useEffect, useState } from 'react'
 
 import placeholderArt from '@/assets/images/mountains.jpg'
 import FrameArt from '@/features/frames/FrameArt'
@@ -18,13 +18,6 @@ type FramePreviewProps = {
 export default function FramePreview({ frame }: FramePreviewProps) {
   const [artUrl, setArtUrl] = useState<string | null>(null)
   const size = overallSize(frame)
-  // On wide screens the preview is as tall as the screen allows, within limits, and exactly as wide
-  // as the frame at that height plus the room for its measurements (`lg:pl-16`), so the page can
-  // center it beside the form.
-  const sizing = {
-    '--preview-height': 'clamp(320px, 60vh, 640px)',
-    '--preview-width': `calc(var(--preview-height) * ${frame.width || 1} / ${frame.height || 1} + 64px)`,
-  } as CSSProperties
 
   // Each picked file gets an object URL, released when another replaces it or the page closes.
   useEffect(() => {
@@ -42,13 +35,11 @@ export default function FramePreview({ frame }: FramePreviewProps) {
   }
 
   return (
-    // Room around the frame for its measurements: above it and to its left.
-    <div
-      style={sizing}
-      className="pt-10 pr-4 pb-6 pl-10 lg:w-(--preview-width) lg:min-w-0 lg:py-16 lg:pr-0 lg:pl-16"
-    >
-      {/* The space the frame fits itself to. */}
-      <div className="@container-size flex h-70 items-center justify-center lg:h-(--preview-height)">
+    // Room around the frame for its measurements: above it and to its left. On wide screens it's a
+    // fixed size, so changing the frame never moves the form beside it.
+    <div className="pt-10 pr-4 pb-6 pl-10 lg:w-2xl lg:min-w-0 lg:py-16 lg:pr-0 lg:pl-16">
+      {/* The space the frame fits itself to: on wide screens, as tall as the screen allows within limits. */}
+      <div className="@container-size flex h-70 items-center justify-center lg:h-[60vh] lg:max-h-160 lg:min-h-80">
         <FrameArt
           frame={frame}
           className="shadow-raised"
