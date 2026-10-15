@@ -26,10 +26,11 @@ export default function SavedFrameRow({ frame, onLoad }: SavedFrameRowProps) {
   return (
     <li className="flex min-h-20 items-center gap-2 rounded-sm bg-paper p-2">
       {isConfirming ? (
-        <div className="flex flex-1 flex-col items-center gap-4 py-2 text-center">
+        // Fits within the row's usual height, so asking doesn't move the rows below.
+        <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
           {/* Worded and styled like the app's delete dialogs, in the row's space. */}
-          <div className="min-w-0">
-            <p className="font-display text-sm font-bold text-ink-strong">
+          <div className="max-w-full min-w-0">
+            <p className="truncate font-display text-sm font-bold text-ink-strong">
               Delete “{frame.name}”?
             </p>
             {deleteFrame.error && (
