@@ -26,6 +26,8 @@ type SelectComboBoxProps = {
   options: SelectOption[]
   /** What to say when what's typed matches no option. Without it, the list closes instead. */
   newValueHint?: (value: string) => string
+  /** With `newValueHint`, what the list says while nothing's typed and there are no options. */
+  noOptionsHint?: string
   name?: string
   required?: boolean
   placeholder?: string
@@ -45,6 +47,7 @@ export default function SelectComboBox({
   onChange,
   options,
   newValueHint,
+  noOptionsHint = 'No options',
   name,
   required,
   placeholder,
@@ -59,7 +62,11 @@ export default function SelectComboBox({
   const typed = value.trim()
   const selectedKey =
     options.find((option) => option.value === typed)?.value ?? null
-  const newValueMessage = newValueHint && typed ? newValueHint(typed) : null
+  const newValueMessage = newValueHint
+    ? typed
+      ? newValueHint(typed)
+      : noOptionsHint
+    : null
 
   return (
     <ComboBox

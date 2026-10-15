@@ -30,6 +30,8 @@ type CustomValueProps = SharedProps<string> & {
   onChange: (value: string) => void
   /** What to say when what's typed matches no option, e.g. that it'll be added. Without it, the list closes instead. */
   newValueHint?: (value: string) => string
+  /** With `newValueHint`, what the list says while nothing's typed and there are no options; "No options" by default. */
+  noOptionsHint?: string
   /** The input's `name`, which keys its validation errors. */
   name?: string
   required?: boolean
@@ -80,6 +82,7 @@ export default function SelectField<T extends string>(
             onChange={props.onChange}
             options={options}
             newValueHint={props.newValueHint}
+            noOptionsHint={props.noOptionsHint}
             name={props.name}
             required={props.required}
             placeholder={props.placeholder}

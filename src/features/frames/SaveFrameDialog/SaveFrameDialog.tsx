@@ -89,6 +89,7 @@ export default function SaveFrameDialog({
           onChange={(artist) => set('artist', artist)}
           options={artists}
           newValueHint={(artist) => `“${artist}” is a new artist.`}
+          noOptionsHint="No artists yet"
           maxLength={255}
           error={errors.artist}
         />
