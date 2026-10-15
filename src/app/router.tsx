@@ -8,6 +8,7 @@ import {
 
 import { paths } from '@/app/paths'
 import RedirectIfSignedIn from '@/features/auth/RedirectIfSignedIn'
+import RequireAuth from '@/features/auth/RequireAuth'
 
 // A route's lazy-loaded component: the default export of the module `load` imports.
 function page(load: () => Promise<{ default: ComponentType }>) {
@@ -47,6 +48,20 @@ export const router = createBrowserRouter([
                 lazy: page(() => import('@/pages/RegisterPage')),
               },
             ],
+          },
+        ],
+      },
+      {
+        element: (
+          <RequireAuth
+            redirectTo={paths.login}
+            afterSignOut={paths.calculator}
+          />
+        ),
+        children: [
+          {
+            path: paths.settings,
+            lazy: page(() => import('@/pages/SettingsPage')),
           },
         ],
       },
