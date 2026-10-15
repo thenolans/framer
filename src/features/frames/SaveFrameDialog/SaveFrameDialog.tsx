@@ -1,17 +1,26 @@
+import { useState } from 'react'
+
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import Dialog, { DialogActions, useDialog } from '@/components/ui/Dialog'
+import SelectField from '@/components/ui/SelectField'
 import TextField from '@/components/ui/TextField'
-import { useFormAction } from '@/hooks/useFormAction'
+import { useDraftSubmit } from '@/hooks/useDraftSubmit'
 import { useFormValidation } from '@/hooks/useFormValidation'
+import { ApiError, errorMessage } from '@/lib/api'
 
 import type { FrameSpec } from '../types'
+import { useArtistNames } from '../useArtistNames'
 import { useCreateFrame } from '../useCreateFrame'
+import {
+  type FrameDetailsDraft,
+  toDraft,
+  toInput,
+  UNTITLED,
+} from './frameDetailsDraft'
 
-/** The name a frame saves with when none is given. */
-const UNTITLED = 'Untitled artwork'
-
-const fields = ['name', 'artist'] as const
+/** Input names of the fields that show their own save errors. */
+const fieldNames = ['name', 'artist']
 
 type SaveFrameDialogProps = {
   frame: FrameSpec
@@ -20,63 +29,75 @@ type SaveFrameDialogProps = {
   onClose: () => void
 }
 
-/** Names the frame in the calculator and saves it to the user's collection. */
+/**
+ * Names the frame in the calculator and saves it to the user's collection. Artists already in the
+ * collection are suggested, so pieces by the same artist share one spelling.
+ */
 export default function SaveFrameDialog({
   frame,
   onSaved,
   onClose,
 }: SaveFrameDialogProps) {
   const { dialogRef, close } = useDialog()
-  const { mutateAsync: createFrame } = useCreateFrame()
+  const [draft, setDraft] = useState(toDraft)
+  const artists = useArtistNames()
   const validation = useFormValidation()
-  const [state, formAction, isPending] = useFormAction(
-    fields,
-    async ({ name, artist }) => {
-      await createFrame({
-        ...frame,
-        name: name.trim() || UNTITLED,
-        artist: artist.trim(),
-      })
+  const { mutateAsync: createFrame } = useCreateFrame()
+  const { formProps, isSaving, saveError } = useDraftSubmit({
+    validation,
+    save: () => createFrame(toInput(draft, frame, artists)),
+    onSaved: () => {
       onSaved()
       close()
     },
-  )
+  })
+
+  const set = <K extends keyof FrameDetailsDraft>(
+    key: K,
+    value: FrameDetailsDraft[K],
+  ) => setDraft((current) => ({ ...current, [key]: value }))
+
+  const apiErrors = saveError instanceof ApiError ? saveError.fieldErrors : {}
+  const errors = { ...apiErrors, ...validation.errors }
+  const formMessage =
+    saveError && !fieldNames.some((field) => apiErrors[field])
+      ? errorMessage(saveError)
+      : null
 
   return (
     <Dialog title="Save to collection" dialogRef={dialogRef} onClose={onClose}>
-      <form
-        action={formAction}
-        {...validation.formProps}
-        className="flex flex-col gap-4"
-      >
-        {state.message && <Alert>{state.message}</Alert>}
+      <form {...formProps} className="flex flex-col gap-4">
+        {formMessage && <Alert>{formMessage}</Alert>}
         <TextField
           label="Artwork name"
           name="name"
+          value={draft.name}
+          onChange={(event) => set('name', event.target.value)}
           placeholder={UNTITLED}
           maxLength={255}
           autoComplete="off"
           // Password managers take a field called "name" for the user's own and offer to fill it.
           data-1p-ignore
           data-autofocus
-          defaultValue={state.values.name}
-          error={validation.errors.name ?? state.fieldErrors.name}
+          error={errors.name}
         />
-        <TextField
+        <SelectField
+          allowsCustomValue
           label="Artist"
           name="artist"
+          value={draft.artist}
+          onChange={(artist) => set('artist', artist)}
+          options={artists}
+          newValueHint={(artist) => `“${artist}” is a new artist.`}
           maxLength={255}
-          autoComplete="off"
-          data-1p-ignore
-          defaultValue={state.values.artist}
-          error={validation.errors.artist ?? state.fieldErrors.artist}
+          error={errors.artist}
         />
         <DialogActions className="mt-2">
           <Button variant="secondary" onClick={close}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isPending}>
-            {isPending ? 'Saving…' : 'Save'}
+          <Button type="submit" disabled={isSaving}>
+            {isSaving ? 'Saving…' : 'Save'}
           </Button>
         </DialogActions>
       </form>

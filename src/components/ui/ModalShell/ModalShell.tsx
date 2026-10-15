@@ -1,5 +1,6 @@
 import {
   type ComponentProps,
+  type KeyboardEvent,
   type MouseEvent,
   type PointerEvent,
   type ReactNode,
@@ -70,12 +71,24 @@ export default function ModalShell({
     if (pressedOutside.current && event.target === event.currentTarget)
       closeModal(dialogRef.current)
   }
+  // Esc on a control whose list is open (a `SelectField`'s options) closes only the list. The control
+  // closes it during the key press, before the dialog hears Esc, so it's noted on the way in.
+  const escapeClosesList = useRef(false)
+  const handleKeyDownCapture = (event: KeyboardEvent) => {
+    escapeClosesList.current =
+      event.key === 'Escape' &&
+      (event.target as Element).getAttribute('aria-expanded') === 'true'
+  }
   // Esc animates out too. The browser may refuse to let a repeated Esc be held back; then it closes at once.
   // React passes a dialog's `cancel` and `close` up to the dialogs around it, so a dialog opened from
   // inside this one (a folder's, from the folder sheet) mustn't close this one too.
   const handleCancel = (event: SyntheticEvent<HTMLDialogElement>) => {
     if (event.target !== event.currentTarget) return
     event.preventDefault()
+    if (escapeClosesList.current) {
+      escapeClosesList.current = false
+      return
+    }
     if (onEscape) onEscape()
     else closeModal(event.currentTarget)
   }
@@ -89,6 +102,7 @@ export default function ModalShell({
       ref={dialogRef}
       onClose={handleClose}
       onCancel={handleCancel}
+      onKeyDownCapture={handleKeyDownCapture}
       onPointerDown={handlePointerDown}
       onClick={handleDialogClick}
       className={cx(
