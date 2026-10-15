@@ -18,12 +18,15 @@ import {
   toInput,
   UNTITLED,
 } from './frameDetailsDraft'
+import { resizeArtwork } from './resizeArtwork'
 
 /** Input names of the fields that show their own save errors. */
 const fieldNames = ['name', 'artist']
 
 type SaveFrameDialogProps = {
   frame: FrameSpec
+  /** The picture of the artwork the user chose, saved with the frame. */
+  artwork?: File
   /** Called once it's saved, as the dialog closes. */
   onSaved: () => void
   onClose: () => void
@@ -35,6 +38,7 @@ type SaveFrameDialogProps = {
  */
 export default function SaveFrameDialog({
   frame,
+  artwork,
   onSaved,
   onClose,
 }: SaveFrameDialogProps) {
@@ -45,7 +49,12 @@ export default function SaveFrameDialog({
   const { mutateAsync: createFrame } = useCreateFrame()
   const { formProps, isSaving, saveError } = useDraftSubmit({
     validation,
-    save: () => createFrame(toInput(draft, frame, artists)),
+    save: async () =>
+      createFrame({
+        ...toInput(draft, frame, artists),
+        // Shrunk so it uploads quickly; sent as it is if the browser can't read it, for the API to check.
+        artwork: artwork && (await resizeArtwork(artwork).catch(() => artwork)),
+      }),
     onSaved: () => {
       onSaved()
       close()

@@ -1,4 +1,4 @@
-import { type DragEvent, useEffect, useState } from 'react'
+import type { DragEvent } from 'react'
 
 import placeholderArt from '@/assets/images/mountains.jpg'
 import FrameArt from '@/features/frames/FrameArt'
@@ -9,24 +9,25 @@ import Measurement from './Measurement'
 
 type FramePreviewProps = {
   frame: FrameSpec
+  /** The artwork's picture; `null` for the sample photo. */
+  artUrl: string | null
+  /** Called with a picture the user picks or drops in. */
+  onChooseArt: (file: File) => void
 }
 
 /**
  * The frame drawn to scale with its overall width and height marked, around a sample photo until
- * the user picks or drops in their own artwork. The artwork stays on the device.
+ * the user picks or drops in their own artwork.
  */
-export default function FramePreview({ frame }: FramePreviewProps) {
-  const [artUrl, setArtUrl] = useState<string | null>(null)
+export default function FramePreview({
+  frame,
+  artUrl,
+  onChooseArt,
+}: FramePreviewProps) {
   const size = overallSize(frame)
 
-  // Each picked file gets an object URL, released when another replaces it or the page closes.
-  useEffect(() => {
-    if (!artUrl) return
-    return () => URL.revokeObjectURL(artUrl)
-  }, [artUrl])
-
   function showArt(file: File | undefined) {
-    if (file?.type.startsWith('image/')) setArtUrl(URL.createObjectURL(file))
+    if (file?.type.startsWith('image/')) onChooseArt(file)
   }
 
   function handleDrop(event: DragEvent) {

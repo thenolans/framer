@@ -22,10 +22,14 @@ export type SavedFrame = FrameSpec & {
   name: string
   /** `''` when none was given. */
   artist: string
+  /** The URL of the artwork's picture; `null` when none was saved. */
+  artwork: string | null
   createdAt: string
 }
 
 export type NewFrame = FrameSpec & {
   name: string
   artist: string
+  /** A picture of the artwork, saved with the frame. */
+  artwork?: File
 }

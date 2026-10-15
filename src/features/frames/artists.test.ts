@@ -9,6 +9,7 @@ const saved = (artist: string, id: number): SavedFrame => ({
   id,
   name: 'Untitled artwork',
   artist,
+  artwork: null,
   createdAt: '2026-10-15T00:00:00Z',
 })
 

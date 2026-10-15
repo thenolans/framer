@@ -13,10 +13,12 @@ import CollectionButton from './CollectionButton'
 import { toDraft, toFrame } from './frameDraft'
 import FrameForm from './FrameForm'
 import FramePreview from './FramePreview'
+import { useArtwork } from './useArtwork'
 import { useSavedDraft } from './useSavedDraft'
 
 export default function CalculatorPage() {
   const [draft, setDraft] = useSavedDraft()
+  const { artwork, choose: chooseArtwork, show: showArtwork } = useArtwork()
   const { user, isLoading } = useCurrentUser()
   const [isSaving, setIsSaving] = useState(false)
   const [isCollectionOpen, setIsCollectionOpen] = useState(false)
@@ -56,19 +58,27 @@ export default function CalculatorPage() {
             </p>
           )}
         </div>
-        <FramePreview frame={frame} />
+        <FramePreview
+          frame={frame}
+          artUrl={artwork?.url ?? null}
+          onChooseArt={chooseArtwork}
+        />
       </main>
 
       {isSaving && (
         <SaveFrameDialog
           frame={frame}
+          artwork={artwork?.file}
           onSaved={() => setSavedToast((count) => count + 1)}
           onClose={() => setIsSaving(false)}
         />
       )}
       {isCollectionOpen && (
         <CollectionDrawer
-          onLoad={(saved) => setDraft(toDraft(saved))}
+          onLoad={(saved) => {
+            setDraft(toDraft(saved))
+            showArtwork(saved.artwork)
+          }}
           onClose={() => setIsCollectionOpen(false)}
         />
       )}
