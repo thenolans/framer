@@ -15,3 +15,17 @@ export type FrameSpec = {
   overlap: number
   wood: Wood
 }
+
+/** A frame saved to the user's collection. */
+export type SavedFrame = FrameSpec & {
+  id: number
+  name: string
+  /** `''` when none was given. */
+  artist: string
+  createdAt: string
+}
+
+export type NewFrame = FrameSpec & {
+  name: string
+  artist: string
+}
