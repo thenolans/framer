@@ -1,9 +1,0 @@
-@import "tailwindcss";
-
-body {
-  background: url("./assets/topography_gray.png") repeat;
-}
-
-body * {
-  font-family: "Montserrat", sans-serif;
-}

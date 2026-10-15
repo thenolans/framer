@@ -1,0 +1,75 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/figtree';
+@import '@fontsource-variable/albert-sans';
+@import './tokens.css';
+
+/* `standalone:` applies in the installed app, not in a browser tab. */
+@custom-variant standalone (@media (display-mode: standalone));
+
+/* `dark:` follows the same rules as the tokens: the OS preference, unless `data-theme` overrides it. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(
+      :root:not([data-theme='light']),
+      :root:not([data-theme='light']) *
+    ) {
+      @slot;
+    }
+  }
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+}
+
+/* The sign-in brand panel's texture: the dark topo tile in both themes. */
+@utility bg-topo-brand {
+  background-image: url('@/assets/images/topo-tile-dark.png');
+  background-size: var(--texture-topo-size);
+}
+
+/* Bottom padding that clears the home indicator on phones without a home button. */
+@utility pb-safe-area {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Bottom padding of a spacing step plus the home indicator, for a panel at the bottom edge (`pb-safe-area-6`). */
+@utility pb-safe-area-* {
+  padding-bottom: calc(
+    --spacing(--value(integer)) + env(safe-area-inset-bottom)
+  );
+}
+
+/* Corners from the parent, for a control whose wrapper sets them (a cell in an `InputGroup`). */
+@utility rounded-inherit {
+  border-radius: inherit;
+}
+
+@layer base {
+  /*
+   * The page holds still behind a modal. The gutter stays when the scrollbar goes, so the page
+   * doesn't shift sideways.
+   */
+  html {
+    scrollbar-gutter: stable;
+
+    &:has(dialog:modal) {
+      overflow: hidden;
+    }
+  }
+
+  body {
+    min-height: 100vh;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: normal;
+    color: var(--color-ink);
+    background: var(--color-paper) var(--texture-topo) repeat;
+    background-size: var(--texture-topo-size);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+}
