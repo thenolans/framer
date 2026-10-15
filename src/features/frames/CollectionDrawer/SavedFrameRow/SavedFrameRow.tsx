@@ -27,22 +27,27 @@ export default function SavedFrameRow({ frame, onLoad }: SavedFrameRowProps) {
     <li className="flex min-h-20 items-center gap-2 rounded-sm bg-paper p-2">
       {isConfirming ? (
         <div className="flex flex-1 flex-wrap items-center justify-between gap-2 pl-2">
+          {/* Worded and styled like the app's delete dialogs, in the row's space. */}
           <div className="min-w-0">
-            <p className="text-sm text-danger">Delete “{frame.name}”?</p>
-            {deleteFrame.error && (
+            <p className="font-display text-sm font-bold text-ink-strong">
+              Delete “{frame.name}”?
+            </p>
+            {deleteFrame.error ? (
               <Alert size="sm">{errorMessage(deleteFrame.error)}</Alert>
+            ) : (
+              <p className="text-xs text-muted">This can’t be undone.</p>
             )}
           </div>
           <div className="ml-auto flex gap-2">
             <Button
-              variant="ghost"
+              variant="secondary"
               size="sm"
               onClick={() => {
                 deleteFrame.reset()
                 setIsConfirming(false)
               }}
             >
-              Cancel
+              Keep
             </Button>
             <Button
               variant="danger"
