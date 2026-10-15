@@ -66,6 +66,7 @@
     rgb(12 46 66 / 35%),
     rgb(0 0 0 / 50%)
   ); /* behind dialogs */
+  --color-mat: #ffffff; /* the mat around artwork in a frame, white in both themes */
 
   /* Text. ink-strong is a navy tint in light mode; in dark mode both are the same near-white */
   --color-ink-strong: light-dark(#0c2e42, #e8f0f1);
