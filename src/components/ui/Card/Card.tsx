@@ -5,7 +5,7 @@ import { cx } from '@/lib/cx'
 type CardElement = 'div' | 'section' | 'article' | 'ul'
 
 const variantClassNames = {
-  /** A standalone card holding content: a note, a form section, a page's main panel. */
+  /** A standalone card holding content: a form section, a page's main panel. */
   panel: 'rounded-sm shadow-card',
   /** A compact card flush with what's around it: a list of rows, a small panel of facts, or a card inside another surface. */
   inset: 'rounded-sm',

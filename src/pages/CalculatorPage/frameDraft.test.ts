@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { defaultFrame } from '@/features/frames/defaultFrame'
 
-import { isLengthInput, toDraft, toFrame } from './frameDraft'
+import { isLengthInput, parseDraft, toDraft, toFrame } from './frameDraft'
 
 describe('toFrame', () => {
   it('reads back the frame a draft was made from', () => {
@@ -26,5 +26,24 @@ describe('isLengthInput', () => {
 
   it.each(['-1', '1.2.3', 'a', '1/2', '1 2'])('rejects %j', (value) => {
     expect(isLengthInput(value)).toBe(false)
+  })
+})
+
+describe('parseDraft', () => {
+  const draft = toDraft(defaultFrame)
+
+  it('accepts a draft', () => {
+    expect(parseDraft(JSON.parse(JSON.stringify(draft)))).toEqual(draft)
+  })
+
+  it.each([
+    ['nothing', null],
+    ['a string', 'draft'],
+    ['a missing length', { ...draft, overlap: undefined }],
+    ['a number for a length', { ...draft, width: 48 }],
+    ['a length that is not one', { ...draft, width: 'wide' }],
+    ['an unknown wood', { ...draft, wood: 'maple' }],
+  ])('rejects %s', (_, value) => {
+    expect(parseDraft(value)).toBeNull()
   })
 })
