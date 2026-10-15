@@ -25,12 +25,14 @@ export default function CalculatorPage() {
   const frame = toFrame(draft)
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-dvh flex-col">
       <CalculatorHeader />
 
-      <main className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pt-6 pb-16 sm:px-8 lg:grid-cols-[minmax(320px,1fr)_minmax(320px,2fr)]">
+      {/* On wide screens the form and preview sit side by side, centered as a pair in the space below
+          the header; the bottom padding matches the header's height, so they're centered on screen. */}
+      <main className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 items-center gap-8 px-4 pt-6 pb-16 sm:px-8 lg:flex lg:justify-center">
         <h1 className="sr-only">Frame calculator</h1>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 lg:w-sm lg:flex-none">
           <FrameForm draft={draft} onChange={setDraft}>
             {user && (
               <div className="flex gap-2">

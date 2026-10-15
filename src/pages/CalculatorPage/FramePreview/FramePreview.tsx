@@ -1,4 +1,4 @@
-import { type DragEvent, useEffect, useState } from 'react'
+import { type CSSProperties, type DragEvent, useEffect, useState } from 'react'
 
 import placeholderArt from '@/assets/images/mountains.jpg'
 import FrameArt from '@/features/frames/FrameArt'
@@ -18,6 +18,13 @@ type FramePreviewProps = {
 export default function FramePreview({ frame }: FramePreviewProps) {
   const [artUrl, setArtUrl] = useState<string | null>(null)
   const size = overallSize(frame)
+  // On wide screens the preview is as tall as the screen allows, within limits, and exactly as wide
+  // as the frame at that height plus the room for its measurements (`lg:pl-16`), so the page can
+  // center it beside the form.
+  const sizing = {
+    '--preview-height': 'clamp(320px, 60vh, 640px)',
+    '--preview-width': `calc(var(--preview-height) * ${frame.width || 1} / ${frame.height || 1} + 64px)`,
+  } as CSSProperties
 
   // Each picked file gets an object URL, released when another replaces it or the page closes.
   useEffect(() => {
@@ -36,9 +43,12 @@ export default function FramePreview({ frame }: FramePreviewProps) {
 
   return (
     // Room around the frame for its measurements: above it and to its left.
-    <div className="pt-10 pr-4 pb-6 pl-10 lg:pt-14 lg:pr-10 lg:pb-8 lg:pl-16">
+    <div
+      style={sizing}
+      className="pt-10 pr-4 pb-6 pl-10 lg:w-(--preview-width) lg:min-w-0 lg:py-16 lg:pr-0 lg:pl-16"
+    >
       {/* The space the frame fits itself to. */}
-      <div className="@container-size flex h-70 items-center justify-center lg:h-100">
+      <div className="@container-size flex h-70 items-center justify-center lg:h-(--preview-height)">
         <FrameArt
           frame={frame}
           className="shadow-raised"
