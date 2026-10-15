@@ -5,10 +5,12 @@ import { paths } from '@/app/paths'
 import Button from '@/components/ui/Button'
 import Toast from '@/components/ui/Toast'
 import { useCurrentUser } from '@/features/auth/useCurrentUser'
+import CollectionDrawer from '@/features/frames/CollectionDrawer'
 import SaveFrameDialog from '@/features/frames/SaveFrameDialog'
 
 import CalculatorHeader from './CalculatorHeader'
-import { toFrame } from './frameDraft'
+import CollectionButton from './CollectionButton'
+import { toDraft, toFrame } from './frameDraft'
 import FrameForm from './FrameForm'
 import FramePreview from './FramePreview'
 import { useSavedDraft } from './useSavedDraft'
@@ -17,6 +19,7 @@ export default function CalculatorPage() {
   const [draft, setDraft] = useSavedDraft()
   const { user, isLoading } = useCurrentUser()
   const [isSaving, setIsSaving] = useState(false)
+  const [isCollectionOpen, setIsCollectionOpen] = useState(false)
   // Counts saves, so each one shows a fresh toast; 0 while none is showing.
   const [savedToast, setSavedToast] = useState(0)
   const frame = toFrame(draft)
@@ -30,9 +33,12 @@ export default function CalculatorPage() {
         <div className="flex flex-col gap-4">
           <FrameForm draft={draft} onChange={setDraft}>
             {user && (
-              <Button block onClick={() => setIsSaving(true)}>
-                Save to collection
-              </Button>
+              <div className="flex gap-2">
+                <Button className="flex-1" onClick={() => setIsSaving(true)}>
+                  Save to collection
+                </Button>
+                <CollectionButton onClick={() => setIsCollectionOpen(true)} />
+              </div>
             )}
           </FrameForm>
           {!isLoading && !user && (
@@ -55,6 +61,12 @@ export default function CalculatorPage() {
           frame={frame}
           onSaved={() => setSavedToast((count) => count + 1)}
           onClose={() => setIsSaving(false)}
+        />
+      )}
+      {isCollectionOpen && (
+        <CollectionDrawer
+          onLoad={(saved) => setDraft(toDraft(saved))}
+          onClose={() => setIsCollectionOpen(false)}
         />
       )}
       {savedToast > 0 && (

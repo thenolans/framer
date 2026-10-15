@@ -107,12 +107,14 @@
   --animate-lift-in: lift-in 220ms ease; /* a centered modal rising into place, like an open note or a dialog */
   --animate-view-in: view-in 240ms ease; /* a modal's content changing in place, like a note to deleting it */
   --animate-view-back: view-back 240ms ease; /* the same, going back */
+  --animate-drawer-in: drawer-in 200ms ease; /* a panel sliding in from the right edge */
   --animate-toast-in: view-in 220ms ease; /* a notice sliding in from the edge it sits on */
   /* Exits hold their last frame, so nothing flashes back before the element goes. */
   --animate-fade-out: fade-out 160ms ease forwards;
   --animate-sheet-out: sheet-out 200ms ease-in forwards;
   --animate-lift-out: lift-out 200ms ease forwards;
   --animate-toast-out: toast-out 200ms ease forwards;
+  --animate-drawer-out: drawer-out 200ms ease forwards;
 
   @keyframes fade-in {
     from {
@@ -157,6 +159,20 @@
     to {
       opacity: 0;
       transform: translateY(40px);
+    }
+  }
+
+  @keyframes drawer-in {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+  }
+
+  @keyframes drawer-out {
+    to {
+      opacity: 0;
+      transform: translateX(40px);
     }
   }
 
