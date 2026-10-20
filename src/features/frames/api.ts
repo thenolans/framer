@@ -9,6 +9,7 @@ type FrameResponse = {
   artist: string
   width: number
   height: number
+  framed: boolean
   frame_width: number
   mat_width: number
   overlap: number
@@ -25,6 +26,7 @@ function toSavedFrame(response: FrameResponse): SavedFrame {
     artist: response.artist,
     width: response.width,
     height: response.height,
+    framed: response.framed,
     frameWidth: response.frame_width,
     matWidth: response.mat_width,
     overlap: response.overlap,
@@ -59,6 +61,7 @@ function toFrameRequest(frame: NewFrame) {
     artist: frame.artist,
     width: frame.width,
     height: frame.height,
+    framed: frame.framed,
     frame_width: frame.frameWidth,
     mat_width: frame.matWidth,
     overlap: frame.overlap,

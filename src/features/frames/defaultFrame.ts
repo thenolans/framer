@@ -4,6 +4,7 @@ import type { FrameSpec } from './types'
 export const defaultFrame: FrameSpec = {
   width: 48,
   height: 24,
+  framed: true,
   frameWidth: 1.5,
   matWidth: 4,
   overlap: 0.5,

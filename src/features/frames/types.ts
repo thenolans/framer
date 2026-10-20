@@ -7,6 +7,8 @@ export type FrameSpec = {
   /** The artwork's size. */
   width: number
   height: number
+  /** Whether it hangs in a frame. Without one it's the artwork alone, and the frame's sizes and wood are kept but unused. */
+  framed: boolean
   /** How wide the wood is on each side. */
   frameWidth: number
   /** How wide the mat is on each side. */

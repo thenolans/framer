@@ -36,12 +36,18 @@ describe('parseDraft', () => {
     expect(parseDraft(JSON.parse(JSON.stringify(draft)))).toEqual(draft)
   })
 
+  it('reads a draft kept before pieces could go unframed as framed', () => {
+    const { framed: _, ...older } = { ...draft, framed: false }
+    expect(parseDraft(older)).toEqual({ ...draft, framed: true })
+  })
+
   it.each([
     ['nothing', null],
     ['a string', 'draft'],
     ['a missing length', { ...draft, overlap: undefined }],
     ['a number for a length', { ...draft, width: 48 }],
     ['a length that is not one', { ...draft, width: 'wide' }],
+    ['a framed that is not a boolean', { ...draft, framed: 'no' }],
     ['an unknown wood', { ...draft, wood: 'maple' }],
   ])('rejects %s', (_, value) => {
     expect(parseDraft(value)).toBeNull()

@@ -2,15 +2,17 @@ import type { FrameSpec } from './types'
 
 /**
  * The finished frame's outside size: the artwork with the mat and frame on each side, less the
- * overlap on each side.
+ * overlap on each side. The artwork's own size when it isn't framed.
  */
 export function overallSize({
   width,
   height,
+  framed,
   frameWidth,
   matWidth,
   overlap,
 }: FrameSpec) {
+  if (!framed) return { width, height }
   const border = (frameWidth + matWidth - overlap) * 2
   return { width: width + border, height: height + border }
 }
@@ -19,14 +21,14 @@ export function overallSize({
  * How to draw a frame to scale in the preview, as CSS percentages: the outside in the overall size's
  * proportions (`ratio`, its width over its height), the frame `framePadding` percent of the outside's
  * width thick, and the mat `matPadding` percent of the width inside the frame. The opening is the
- * artwork less the overlap on each side. Just the artwork while a side of it is 0 or the overlap
- * leaves no opening.
+ * artwork less the overlap on each side. Just the artwork when it isn't framed, or while a side of it
+ * is 0 or the overlap leaves no opening.
  */
 export function previewLayout(spec: FrameSpec) {
-  const { width, height, frameWidth, matWidth, overlap } = spec
+  const { width, height, framed, frameWidth, matWidth, overlap } = spec
   const outside = overallSize(spec)
   const insideWidth = outside.width - frameWidth * 2
-  if (!width || !height || overlap * 2 >= Math.min(width, height)) {
+  if (!framed || !width || !height || overlap * 2 >= Math.min(width, height)) {
     return {
       ratio: (width || 1) / (height || 1),
       framePadding: 0,

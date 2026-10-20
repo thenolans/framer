@@ -78,7 +78,7 @@ export default function SavedFrameRow({ frame, onLoad }: SavedFrameRowProps) {
               )}
               <span className="block text-xs text-muted">
                 {formatInches(frame.width)} × {formatInches(frame.height)} ·{' '}
-                {woodLabels[frame.wood]}
+                {frame.framed ? woodLabels[frame.wood] : 'No frame'}
               </span>
             </span>
           </button>

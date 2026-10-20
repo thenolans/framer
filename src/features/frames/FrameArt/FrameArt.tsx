@@ -16,7 +16,8 @@ type FrameArtProps = {
 }
 
 /**
- * A frame in its wood around a mat, drawn to scale, with the artwork filling the opening. It fills as much of its container as it can without changing shape,
+ * A frame in its wood around a mat, drawn to scale, with the artwork filling the opening, or the
+ * artwork alone when it isn't framed. It fills as much of its container as it can without changing shape,
  * so the container must be a size container (`@container-size`) with a set height.
  */
 export default function FrameArt({
@@ -35,7 +36,9 @@ export default function FrameArt({
         // Whichever of the container's width or height is tighter limits the frame, so its
         // proportions never stretch.
         width: `min(100%, 100cqh * ${ratio})`,
-        backgroundImage: `url(${woodTextures[frame.wood]})`,
+        backgroundImage: frame.framed
+          ? `url(${woodTextures[frame.wood]})`
+          : undefined,
       }}
     >
       {annotations}

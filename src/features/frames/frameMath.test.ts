@@ -6,6 +6,7 @@ import type { FrameSpec } from './types'
 const frame: FrameSpec = {
   width: 48,
   height: 24,
+  framed: true,
   frameWidth: 1.5,
   matWidth: 4,
   overlap: 0.5,
@@ -21,6 +22,13 @@ describe('overallSize', () => {
     expect(
       overallSize({ ...frame, frameWidth: 0, matWidth: 0, overlap: 0 }),
     ).toEqual({ width: 48, height: 24 })
+  })
+
+  it("is the artwork alone when it isn't framed, whatever the frame's sizes", () => {
+    expect(overallSize({ ...frame, framed: false })).toEqual({
+      width: 48,
+      height: 24,
+    })
   })
 })
 
@@ -59,6 +67,14 @@ describe('previewLayout', () => {
     expect(previewLayout({ ...frame, overlap: 12 })).toEqual({
       ratio: 2,
       ...artOnly,
+    })
+  })
+
+  it("is just the artwork when it isn't framed", () => {
+    expect(previewLayout({ ...frame, framed: false })).toEqual({
+      ratio: 2,
+      framePadding: 0,
+      matPadding: 0,
     })
   })
 })

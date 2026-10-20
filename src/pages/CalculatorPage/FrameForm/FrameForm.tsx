@@ -2,6 +2,7 @@ import type { ChangeEvent, ReactNode } from 'react'
 
 import Card from '@/components/ui/Card'
 import Eyebrow from '@/components/ui/Eyebrow'
+import SegmentedControl from '@/components/ui/SegmentedControl'
 import TextField from '@/components/ui/TextField'
 import { formatInches, overallSize } from '@/features/frames/frameMath'
 
@@ -20,7 +21,15 @@ type FrameFormProps = {
   children?: ReactNode
 }
 
-/** The artwork's size, the frame around it and its wood, with the overall size they come to. */
+const hangOptions = [
+  { value: 'framed', label: 'Framed' },
+  { value: 'unframed', label: 'No frame' },
+] as const
+
+/**
+ * The artwork's size, whether it's framed, the frame around it and its wood, with the overall size
+ * they come to. Unframed, the frame's fields are hidden but keep their values for framing it again.
+ */
 export default function FrameForm({
   draft,
   onChange,
@@ -61,22 +70,40 @@ export default function FrameForm({
         </div>
       </fieldset>
 
-      <fieldset className="min-w-0">
-        <legend className="mb-2">
-          <Eyebrow>Frame</Eyebrow>
-          <span className="sr-only"> sizes in inches</span>
-        </legend>
-        <div className="grid grid-cols-2 gap-4">
-          <TextField label="Frame width" {...lengthProps('frameWidth')} />
-          <TextField label="Mat width" {...lengthProps('matWidth')} />
-          <TextField label="Overlap" {...lengthProps('overlap')} />
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between gap-4">
+          <Eyebrow aria-hidden="true">Frame</Eyebrow>
+          <SegmentedControl
+            label="Frame"
+            options={hangOptions}
+            value={draft.framed ? 'framed' : 'unframed'}
+            onChange={(hang) =>
+              onChange({ ...draft, framed: hang === 'framed' })
+            }
+          />
         </div>
-      </fieldset>
+        {draft.framed ? (
+          <fieldset className="min-w-0">
+            <legend className="sr-only">Frame sizes in inches</legend>
+            <div className="grid grid-cols-2 gap-4">
+              <TextField label="Frame width" {...lengthProps('frameWidth')} />
+              <TextField label="Mat width" {...lengthProps('matWidth')} />
+              <TextField label="Overlap" {...lengthProps('overlap')} />
+            </div>
+          </fieldset>
+        ) : (
+          <p className="text-sm text-muted">
+            Hangs as it is. Its frame sizes are kept if you frame it later.
+          </p>
+        )}
+      </div>
 
-      <WoodPicker
-        value={draft.wood}
-        onChange={(wood) => onChange({ ...draft, wood })}
-      />
+      {draft.framed && (
+        <WoodPicker
+          value={draft.wood}
+          onChange={(wood) => onChange({ ...draft, wood })}
+        />
+      )}
 
       <div className="flex items-baseline justify-between gap-4 border-t border-border pt-4">
         <Eyebrow>Overall size</Eyebrow>
