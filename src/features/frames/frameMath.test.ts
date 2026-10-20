@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { borderPercent, formatInches, overallSize } from './frameMath'
+import { formatInches, overallSize, previewLayout } from './frameMath'
 import type { FrameSpec } from './types'
 
 const frame: FrameSpec = {
@@ -24,20 +24,42 @@ describe('overallSize', () => {
   })
 })
 
-describe('borderPercent', () => {
-  it("is half the border's share of the longer side", () => {
-    expect(borderPercent(4, 48, 24)).toBeCloseTo(4.1667)
-    expect(borderPercent(4, 24, 48)).toBeCloseTo(4.1667)
+describe('previewLayout', () => {
+  it("draws the outside in the overall size's proportions", () => {
+    expect(previewLayout(frame).ratio).toBeCloseTo(58 / 34)
   })
 
-  it('is at least 1%', () => {
-    expect(borderPercent(0.25, 48, 24)).toBe(1)
+  it('draws the frame and mat to scale', () => {
+    // The frame is 1.5 of the 58 outside, the mat 4 of the 55 inside the frame.
+    const layout = previewLayout(frame)
+    expect(layout.framePadding).toBeCloseTo((1.5 / 58) * 100)
+    expect(layout.matPadding).toBeCloseTo((4 / 55) * 100)
   })
 
-  it('is 0 while the border or a side is 0', () => {
-    expect(borderPercent(0, 48, 24)).toBe(0)
-    expect(borderPercent(4, 0, 24)).toBe(0)
-    expect(borderPercent(4, 48, 0)).toBe(0)
+  it('leaves an opening of the artwork less the overlap', () => {
+    // 8 wide: a 6 × 8 artwork with a 1.5 frame and no mat, overlapping it by 0.5 on each side.
+    const { ratio, framePadding } = previewLayout({
+      ...frame,
+      width: 6,
+      height: 8,
+      frameWidth: 1.5,
+      matWidth: 0,
+    })
+    expect(ratio).toBeCloseTo(8 / 10)
+    // 1.5 off each side of 8 leaves 5, the artwork's 6 less 0.5 on each side.
+    expect(8 * (1 - (framePadding / 100) * 2)).toBeCloseTo(5)
+  })
+
+  it('is just the artwork while a side is 0 or the overlap leaves no opening', () => {
+    const artOnly = { framePadding: 0, matPadding: 0 }
+    expect(previewLayout({ ...frame, width: 0 })).toEqual({
+      ratio: 1 / 24,
+      ...artOnly,
+    })
+    expect(previewLayout({ ...frame, overlap: 12 })).toEqual({
+      ratio: 2,
+      ...artOnly,
+    })
   })
 })
 

@@ -16,13 +16,28 @@ export function overallSize({
 }
 
 /**
- * How thick to draw a border (the frame or the mat) in the preview, as a percentage for CSS
- * padding: half the border's share of the artwork's longer side, and at least 1% so it never
- * disappears. 0 while the border or either side of the artwork is 0.
+ * How to draw a frame to scale in the preview, as CSS percentages: the outside in the overall size's
+ * proportions (`ratio`, its width over its height), the frame `framePadding` percent of the outside's
+ * width thick, and the mat `matPadding` percent of the width inside the frame. The opening is the
+ * artwork less the overlap on each side. Just the artwork while a side of it is 0 or the overlap
+ * leaves no opening.
  */
-export function borderPercent(border: number, width: number, height: number) {
-  if (!border || !width || !height) return 0
-  return Math.max(((border / Math.max(width, height)) * 100) / 2, 1)
+export function previewLayout(spec: FrameSpec) {
+  const { width, height, frameWidth, matWidth, overlap } = spec
+  const outside = overallSize(spec)
+  const insideWidth = outside.width - frameWidth * 2
+  if (!width || !height || overlap * 2 >= Math.min(width, height)) {
+    return {
+      ratio: (width || 1) / (height || 1),
+      framePadding: 0,
+      matPadding: 0,
+    }
+  }
+  return {
+    ratio: outside.width / outside.height,
+    framePadding: (frameWidth / outside.width) * 100,
+    matPadding: (matWidth / insideWidth) * 100,
+  }
 }
 
 /** A length in inches for display, to at most two decimal places (`24.5"`). */
