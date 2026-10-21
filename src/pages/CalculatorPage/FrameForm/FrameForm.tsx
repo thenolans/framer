@@ -70,19 +70,17 @@ export default function FrameForm({
         </div>
       </fieldset>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-4">
-          <Eyebrow aria-hidden="true">Frame</Eyebrow>
-          <SegmentedControl
-            label="Frame"
-            options={hangOptions}
-            value={draft.framed ? 'framed' : 'unframed'}
-            onChange={(hang) =>
-              onChange({ ...draft, framed: hang === 'framed' })
-            }
-          />
-        </div>
-        {draft.framed ? (
+      <div className="flex flex-col gap-4">
+        {/* Stands in for the section's label, so it spans the form. */}
+        <SegmentedControl
+          label="Frame"
+          options={hangOptions}
+          value={draft.framed ? 'framed' : 'unframed'}
+          onChange={(hang) => onChange({ ...draft, framed: hang === 'framed' })}
+          size="md"
+          className="w-full"
+        />
+        {draft.framed && (
           <fieldset className="min-w-0">
             <legend className="sr-only">Frame sizes in inches</legend>
             <div className="grid grid-cols-2 gap-4">
@@ -91,10 +89,6 @@ export default function FrameForm({
               <TextField label="Overlap" {...lengthProps('overlap')} />
             </div>
           </fieldset>
-        ) : (
-          <p className="text-sm text-muted">
-            Hangs as it is. Its frame sizes are kept if you frame it later.
-          </p>
         )}
       </div>
 
