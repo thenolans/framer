@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 
 import AvocadoIcon from './AvocadoIcon'
+import DabberIcon from './DabberIcon'
 import JotIcon from './JotIcon'
 import TomeOfScoringIcon from './TomeOfScoringIcon'
 
@@ -46,6 +47,17 @@ export const otherApps: OtherApp[] = [
       color: 'light-dark(#5b3fa0, #b79bea)',
       soft: 'light-dark(#e8e3f5, #2e2645)',
       mid: '#8a6fd1',
+    },
+  },
+  {
+    name: 'dabber',
+    description: 'Bingo card maker',
+    href: 'https://dabber.thenolans.io',
+    Icon: DabberIcon,
+    brand: {
+      color: 'light-dark(#185d64, #6dbfc5)',
+      soft: 'light-dark(#cfecee, #144b51)',
+      mid: '#3fa0a8',
     },
   },
   {
