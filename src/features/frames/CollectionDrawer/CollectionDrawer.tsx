@@ -1,9 +1,8 @@
-import CloseIcon from '@/components/icons/CloseIcon'
+import CloseButton from '@/components/ui/CloseButton'
 import { useDialog } from '@/components/ui/Dialog'
 import EmptyState from '@/components/ui/EmptyState'
 import ErrorRetry from '@/components/ui/ErrorRetry'
 import Heading from '@/components/ui/Heading'
-import IconButton from '@/components/ui/IconButton'
 import ModalShell from '@/components/ui/ModalShell'
 import SheetHandle from '@/components/ui/SheetHandle'
 
@@ -40,8 +39,10 @@ export default function CollectionDrawer({
       dialogRef={dialogRef}
       aria-label="Your collection"
       onClose={onClose}
-      className="flex items-end justify-center overflow-clip pt-12 md:items-stretch md:justify-end md:p-0"
-      panelClassName="flex max-h-full w-full flex-col overflow-hidden max-md:rounded-b-none max-md:motion-safe:animate-sheet-in max-md:motion-safe:in-data-closing:animate-sheet-out md:h-full md:max-w-sm md:rounded-none md:border-l md:border-border md:motion-safe:animate-drawer-in md:motion-safe:in-data-closing:animate-drawer-out"
+      sheet
+      className="md:items-stretch md:justify-end md:p-0"
+      // The list scrolls itself, clearing the home indicator.
+      panelClassName="flex flex-col overflow-hidden max-md:pb-0 md:h-full md:max-w-sm md:rounded-none md:border-l md:border-border md:motion-safe:animate-drawer-in md:motion-safe:in-data-closing:animate-drawer-out"
     >
       <div className="flex-none border-b border-border-soft px-6 pb-4 md:pt-4">
         <SheetHandle onClick={close} className="-mx-6 mb-2" />
@@ -49,14 +50,7 @@ export default function CollectionDrawer({
           <Heading as="h2" variant="subsection">
             Your collection
           </Heading>
-          <IconButton
-            size="lg"
-            onClick={close}
-            aria-label="Close"
-            className="-mr-2"
-          >
-            <CloseIcon size={20} />
-          </IconButton>
+          <CloseButton onClick={close} />
         </div>
       </div>
 

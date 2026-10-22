@@ -26,6 +26,8 @@ type ModalShellProps = Omit<
   /** Called on Esc in place of closing, e.g. to go back to a modal's main view (`useModalView`). */
   onEscape?: () => void
   children: ReactNode
+  /** Below `md`, the panel is a sheet that slides up from the bottom edge, full width; from `md` it's centered. */
+  sheet?: boolean
   /** Classes for the full-screen dialog, e.g. to position the panel. */
   className?: string
   /** Classes for the panel, e.g. to set its size and padding. */
@@ -44,6 +46,7 @@ export default function ModalShell({
   onClose,
   onEscape,
   children,
+  sheet = false,
   className,
   panelClassName,
   ...props
@@ -81,7 +84,7 @@ export default function ModalShell({
   }
   // Esc animates out too. The browser may refuse to let a repeated Esc be held back; then it closes at once.
   // React passes a dialog's `cancel` and `close` up to the dialogs around it, so a dialog opened from
-  // inside this one (a folder's, from the folder sheet) mustn't close this one too.
+  // inside this one mustn't close this one too.
   const handleCancel = (event: SyntheticEvent<HTMLDialogElement>) => {
     if (event.target !== event.currentTarget) return
     event.preventDefault()
@@ -107,12 +110,19 @@ export default function ModalShell({
       onClick={handleDialogClick}
       className={cx(
         'fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-ink not-open:hidden backdrop:animate-fade-in backdrop:bg-overlay data-closing:pointer-events-none motion-safe:data-closing:backdrop:animate-fade-out motion-reduce:backdrop:animate-none',
+        // The gap above a sheet leaves some of the page in view, and a tap there closes it. The dialog
+        // clips the panel as it slides in from below. Clip, not hidden: hidden still scrolls to show the
+        // focused control, which cancels the slide.
+        sheet &&
+          'flex items-end justify-center overflow-clip pt-12 md:items-center md:p-4',
         className,
       )}
     >
       <div
         className={cx(
           'animate-lift-in rounded-md bg-surface shadow-raised motion-safe:in-data-closing:animate-lift-out motion-reduce:animate-none',
+          sheet &&
+            'max-h-full w-full max-md:max-w-none max-md:rounded-b-none max-md:pb-safe-area max-md:motion-safe:animate-sheet-in max-md:motion-safe:in-data-closing:animate-sheet-out',
           panelClassName,
         )}
       >

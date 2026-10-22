@@ -7,7 +7,7 @@ import IconButton from '@/components/ui/IconButton'
 /** How long a toast stays before leaving by itself. */
 const DISPLAY_TIME = 3000
 /** How long it takes to leave, matching `animate-toast-out`. */
-const LEAVE_TIME = 200
+const LEAVE_TIME = 160
 
 type ToastProps = {
   title: string
