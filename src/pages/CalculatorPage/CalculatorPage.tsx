@@ -7,6 +7,7 @@ import Toast from '@/components/ui/Toast'
 import { useCurrentUser } from '@/features/auth/useCurrentUser'
 import CollectionDrawer from '@/features/frames/CollectionDrawer'
 import SaveFrameDialog from '@/features/frames/SaveFrameDialog'
+import { useSavedFrame } from '@/features/frames/useSavedFrame'
 import { cx } from '@/lib/cx'
 
 import CalculatorHeader from './CalculatorHeader'
@@ -16,12 +17,16 @@ import { toDraft, toFrame } from './frameDraft'
 import FrameForm from './FrameForm'
 import FramePreview from './FramePreview'
 import { useArtwork } from './useArtwork'
+import { useLoadedFrameId } from './useLoadedFrameId'
 import { useSavedDraft } from './useSavedDraft'
 
 export default function CalculatorPage() {
   const [draft, setDraft] = useSavedDraft()
-  const { artwork, choose: chooseArtwork, show: showArtwork } = useArtwork()
+  const artwork = useArtwork()
   const { user, isLoading } = useCurrentUser()
+  const [loadedFrameId, setLoadedFrameId] = useLoadedFrameId()
+  // Signed out, or once it's deleted, there's no frame to update.
+  const loadedFrame = useSavedFrame(user ? loadedFrameId : null)
   const [isSaving, setIsSaving] = useState(false)
   const [isCollectionOpen, setIsCollectionOpen] = useState(false)
   // Counts saves, so each one shows a fresh toast; 0 while none is showing.
@@ -69,8 +74,8 @@ export default function CalculatorPage() {
         </div>
         <FramePreview
           frame={frame}
-          artUrl={artwork?.url ?? null}
-          onChooseArt={chooseArtwork}
+          artUrl={artwork.url ?? loadedFrame?.artwork ?? null}
+          onChooseArt={artwork.choose}
         />
       </main>
 
@@ -83,8 +88,13 @@ export default function CalculatorPage() {
       {isSaving && (
         <SaveFrameDialog
           frame={frame}
-          artwork={artwork?.file}
-          onSaved={() => setSavedToast((count) => count + 1)}
+          artwork={artwork}
+          loadedFrame={loadedFrame}
+          onSaved={(saved) => {
+            setLoadedFrameId(saved.id)
+            artwork.markSaved()
+            setSavedToast((count) => count + 1)
+          }}
           onClose={() => setIsSaving(false)}
         />
       )}
@@ -92,7 +102,8 @@ export default function CalculatorPage() {
         <CollectionDrawer
           onLoad={(saved) => {
             setDraft(toDraft(saved))
-            showArtwork(saved.artwork)
+            artwork.showSaved()
+            setLoadedFrameId(saved.id)
           }}
           onClose={() => setIsCollectionOpen(false)}
         />

@@ -34,4 +34,17 @@ export type NewFrame = FrameSpec & {
   artist: string
   /** A picture of the artwork, saved with the frame. */
   artwork?: File
+  /** Another saved frame whose picture to copy, when there's no `artwork` file. */
+  artworkFrom?: number
+}
+
+/** Changes to a saved frame; its picture is left as it is unless `artwork` replaces it. */
+export type FrameChanges = Omit<NewFrame, 'artworkFrom'>
+
+/** The picture of the artwork in the calculator. */
+export type ArtworkPicture = {
+  /** A picture the user chose; `null` when there's none, and the loaded frame's (or the sample photo) shows instead. */
+  file: File | null
+  /** Whether the loaded frame was saved with `file`, so saving changes can leave its picture be. */
+  isSaved: boolean
 }

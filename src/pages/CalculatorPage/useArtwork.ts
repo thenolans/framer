@@ -1,30 +1,34 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-/** The artwork in the preview: a picture the user chose, or a saved frame's. */
-export type Artwork = {
-  url: string
-  /** The picture the user chose, to save with the frame; unset for a saved frame's. */
-  file?: File
-}
+import type { ArtworkPicture } from '@/features/frames/types'
+
+const NONE: ArtworkPicture = { file: null, isSaved: false }
 
 /**
- * The artwork shown in the calculator, `null` for the sample photo. A chosen picture gets an object URL,
- * released when another replaces it or the page closes.
+ * The picture of the artwork the user chose for the calculator, with an object URL released when
+ * another replaces it or the page closes. Without one, `url` is `null` and the loaded frame's saved
+ * picture shows, or the sample photo.
  */
 export function useArtwork() {
-  const [artwork, setArtwork] = useState<Artwork | null>(null)
+  const [artwork, setArtwork] = useState(NONE)
+  const url = useMemo(
+    () => artwork.file && URL.createObjectURL(artwork.file),
+    [artwork.file],
+  )
 
   useEffect(() => {
-    if (!artwork?.file) return
-    return () => URL.revokeObjectURL(artwork.url)
-  }, [artwork])
+    if (!url) return
+    return () => URL.revokeObjectURL(url)
+  }, [url])
 
   return {
-    artwork,
+    ...artwork,
+    url,
     /** Shows a picture the user chose. */
-    choose: (file: File) =>
-      setArtwork({ url: URL.createObjectURL(file), file }),
-    /** Shows a saved frame's picture, or the sample photo for `null`. */
-    show: (url: string | null) => setArtwork(url ? { url } : null),
+    choose: (file: File) => setArtwork({ file, isSaved: false }),
+    /** Shows the loaded frame's saved picture, if it has one, in place of a chosen one. */
+    showSaved: () => setArtwork(NONE),
+    /** Notes that the frame was just saved with this picture. */
+    markSaved: () => setArtwork({ file: artwork.file, isSaved: true }),
   }
 }

@@ -1,6 +1,6 @@
 import { api, rekeyFieldErrors } from '@/lib/api'
 
-import type { NewFrame, SavedFrame, Wood } from './types'
+import type { FrameChanges, NewFrame, SavedFrame, Wood } from './types'
 
 /** A frame as the API sends it. */
 type FrameResponse = {
@@ -42,14 +42,30 @@ export async function fetchFrames() {
   return frames.map(toSavedFrame)
 }
 
+/** Request fields whose `NewFrame` name differs. */
+const inputFieldNames = {
+  frame_width: 'frameWidth',
+  mat_width: 'matWidth',
+  artwork_from: 'artworkFrom',
+}
+
 export async function createFrame(frame: NewFrame) {
   const response = await api
     .post<FrameResponse>('/framer/frames/', toFrameRequest(frame))
     .catch((error: unknown) => {
-      throw rekeyFieldErrors(error, {
-        frame_width: 'frameWidth',
-        mat_width: 'matWidth',
-      })
+      throw rekeyFieldErrors(error, inputFieldNames)
+    })
+  return toSavedFrame(response)
+}
+
+export async function updateFrame({
+  id,
+  ...changes
+}: FrameChanges & { id: number }) {
+  const response = await api
+    .patch<FrameResponse>(`/framer/frames/${id}/`, toFrameRequest(changes))
+    .catch((error: unknown) => {
+      throw rekeyFieldErrors(error, inputFieldNames)
     })
   return toSavedFrame(response)
 }
@@ -66,12 +82,14 @@ function toFrameRequest(frame: NewFrame) {
     mat_width: frame.matWidth,
     overlap: frame.overlap,
     wood: frame.wood,
+    // Left out of the JSON when there's none.
+    artwork_from: frame.artworkFrom,
   }
   if (!frame.artwork) return fields
 
   const body = new FormData()
   for (const [field, value] of Object.entries(fields))
-    body.set(field, String(value))
+    if (value !== undefined) body.set(field, String(value))
   body.set('artwork', frame.artwork)
   return body
 }
