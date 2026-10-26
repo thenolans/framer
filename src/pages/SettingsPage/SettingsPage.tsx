@@ -51,7 +51,6 @@ export default function SettingsPage() {
               onChange={setTheme}
             />
           </SettingsRow>
-          <UpdateRow />
         </SettingsSection>
 
         <SettingsSection title="Account">
@@ -74,6 +73,10 @@ export default function SettingsPage() {
         </SettingsSection>
 
         <AppSwitcher />
+
+        <SettingsSection title="Updates">
+          <UpdateRow />
+        </SettingsSection>
       </PageContainer>
     </div>
   )
