@@ -7,9 +7,11 @@ import Toast from '@/components/ui/Toast'
 import { useCurrentUser } from '@/features/auth/useCurrentUser'
 import CollectionDrawer from '@/features/frames/CollectionDrawer'
 import SaveFrameDialog from '@/features/frames/SaveFrameDialog'
+import { cx } from '@/lib/cx'
 
 import CalculatorHeader from './CalculatorHeader'
 import CollectionButton from './CollectionButton'
+import FrameActionBar from './FrameActionBar'
 import { toDraft, toFrame } from './frameDraft'
 import FrameForm from './FrameForm'
 import FramePreview from './FramePreview'
@@ -27,7 +29,13 @@ export default function CalculatorPage() {
   const frame = toFrame(draft)
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    // Signed in, on phones the page clears the action bar along the bottom edge.
+    <div
+      className={cx(
+        'flex min-h-dvh flex-col',
+        user && 'pb-(--tab-bar-height) md:pb-0',
+      )}
+    >
       <CalculatorHeader />
 
       {/* On wide screens the form and the preview's fixed box sit side by side, centered as a pair in the
@@ -37,8 +45,9 @@ export default function CalculatorPage() {
         <h1 className="sr-only">Frame calculator</h1>
         <div className="flex flex-col gap-4 lg:w-sm lg:flex-none">
           <FrameForm draft={draft} onChange={setDraft}>
+            {/* On phones the action bar takes their place. */}
             {user && (
-              <div className="flex gap-2">
+              <div className="flex gap-2 max-md:hidden">
                 <Button className="flex-1" onClick={() => setIsSaving(true)}>
                   Save to collection
                 </Button>
@@ -65,6 +74,12 @@ export default function CalculatorPage() {
         />
       </main>
 
+      {user && (
+        <FrameActionBar
+          onOpenCollection={() => setIsCollectionOpen(true)}
+          onSave={() => setIsSaving(true)}
+        />
+      )}
       {isSaving && (
         <SaveFrameDialog
           frame={frame}
