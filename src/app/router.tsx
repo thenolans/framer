@@ -9,6 +9,7 @@ import {
 import { paths } from '@/app/paths'
 import RedirectIfSignedIn from '@/features/auth/RedirectIfSignedIn'
 import RequireAuth from '@/features/auth/RequireAuth'
+import SharedSession from '@/features/auth/SharedSession'
 
 // A route's lazy-loaded component: the default export of the module `load` imports.
 function page(load: () => Promise<{ default: ComponentType }>) {
@@ -19,10 +20,12 @@ function page(load: () => Promise<{ default: ComponentType }>) {
 // code arrives the screen stays blank.
 export const router = createBrowserRouter([
   {
-    // A new page opens at the top; going back returns to where that page was scrolled.
+    // A new page opens at the top; going back returns to where that page was scrolled. The session
+    // follows signing in and out in our other apps.
     element: (
       <>
         <ScrollRestoration />
+        <SharedSession />
         <Outlet />
       </>
     ),
